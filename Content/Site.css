@@ -1,0 +1,102 @@
+﻿
+/** Gambit Challenge CSS **/
+
+body
+{
+    margin: 0 auto;
+    padding-top: 30px;
+    text-align: center;
+
+    font-family: Arial;
+}
+
+h1
+{
+    font-size: 2em;
+    margin: 15px 0 30px 0;
+    text-align: center;
+}
+
+footer
+{
+    height: 200px;
+    margin-top: 10px;
+    color: gray;
+}
+
+input
+{
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+}
+input[type=text], input[type=text]:disabled
+{
+    height: 100%;
+    margin: 0;
+    padding: 0 10px;
+    border: none;
+    vertical-align: middle;
+}
+input[type=submit]
+{
+    height: 50px;
+    margin: 0;
+    border: 1px solid silver;
+    background: white;
+    background: linear-gradient(to bottom, #a9db80 0%,#96c56f 100%);
+}
+    input[type=submit]:hover
+    {
+        border-color: goldenrod;
+        background: gold;
+    }
+
+div.content-container
+{
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+
+    border: 1px solid silver;
+    background-color: #EFEFEF;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 0 10px;
+
+    text-align: left;
+}
+div.label-wrapper
+{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    font-size: 1.1em;
+    border: 1px solid silver;
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    
+}
+    div.label-wrapper.green
+    {
+        color: darkgreen;
+        background: green;
+        background: linear-gradient(to bottom, #a9db80 0%,#96c56f 100%);
+    }
+    div.label-wrapper.red
+    {
+        color: darkred;
+        background: orangered;
+        background: linear-gradient(to bottom, #fe9090 0%,#ff7777 100%);
+    }
+    div.label-wrapper > div
+    {
+        float: left;
+        width: 200px;
+        padding: 0 10px;
+        vertical-align: middle;
+    }
+    div.label-wrapper>input, div.label-wrapper>input:disabled
+{
+    float: right;
+    width: calc(100% - 200px - 1px);
+    border-left: 1px solid silver;
+    background: #FCFCFC;
+}
