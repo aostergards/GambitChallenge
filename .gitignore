@@ -1,3 +1,14 @@
+.App_Start
+.bin
+.Content
+.fonts
+.obj
+.Properties
+.Scripts
+
+*.csproj
+*.csproj.user
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
