@@ -12,11 +12,14 @@ namespace GambitChallenge
 {
     public partial class _Default : Page
     {
+        // Data sources:
         private const string FeedURL = "http://tuftuf.gambitlabs.fi/feed.txt";
         private const string FeedFilename = "feed.txt";
 
-        private DateTime _logDate;
-        
+        // Switch to decide which source to use:
+        private const bool UseLiveFeed = false;
+
+        private DateTime _logDate;        
         private Entry[] _entries = new Entry[]
             {
                 new Entry(01, 2, "Flow Rate", "m³/h", EntryFormat.REAL4),
@@ -39,15 +42,25 @@ namespace GambitChallenge
         {
             Dictionary<int, int> rawEntries = new Dictionary<int, int>();
 
-            // Read the feed file:
-            /*
-            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(FeedURL);
-            httpRequest.Timeout = 10000;
+            // Decide what source to read data from:
+            StreamReader reader;
+            if (UseLiveFeed)
+            {
+                // Get online live feed:
+                HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(FeedURL);
+                httpRequest.Timeout = 10000;
 
-            HttpWebResponse webResponse = (HttpWebResponse)httpRequest.GetResponse();
-            */
+                HttpWebResponse webResponse = (HttpWebResponse)httpRequest.GetResponse();
+                reader = new StreamReader(webResponse.GetResponseStream());
+            }
+            else
+            {
+                // Use local test file:
+                reader = new StreamReader(Server.MapPath("~/App_Data/" + FeedFilename));
+            }            
 
-            using (StreamReader reader = new StreamReader(Server.MapPath("~/App_Data/" + FeedFilename))) //webResponse.GetResponseStream()))
+            // Begin using reader:
+            using (reader)
             {
                 bool isDateRead = false;
 
@@ -75,7 +88,7 @@ namespace GambitChallenge
             foreach (Entry entry in _entries)
             {
                 int regID = entry.RegisterID;
-                int slots = entry.Slots;
+                int slots = entry.Length;
 
                 int[] values = new int[slots];
 

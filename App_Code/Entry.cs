@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GambitChallenge.App_Code
 {
@@ -8,6 +7,7 @@ namespace GambitChallenge.App_Code
     {
         #region Fields
 
+        // References for the 16-bit error value range:
         private static Dictionary<int, string> _errorMeanings = new Dictionary<int, string>()
         {
             { 00, "no received signal" },
@@ -33,7 +33,7 @@ namespace GambitChallenge.App_Code
         #region Properties
 
         public int RegisterID { get; private set; }
-        public int Slots { get; private set; }
+        public int Length { get; private set; }
         public string Name { get; private set; }
         public string Unit { get; private set; }
         public EntryFormat Format { get; private set; }
@@ -46,22 +46,19 @@ namespace GambitChallenge.App_Code
 
         #region Constructors
 
-        public Entry(int regID, int slots, string name, EntryFormat format)
-            : this(regID, slots, name, null, format, null)
-        { }
+        public Entry(int regID, int length, string name, EntryFormat format)
+            : this(regID, length, name, null, format, null) { }
 
-        public Entry(int regID, int slots, string name, EntryFormat format, Func<int[], object> specialRule)
-            : this(regID, slots, name, null, format, specialRule)
-        { }
+        public Entry(int regID, int length, string name, EntryFormat format, Func<int[], object> specialRule)
+            : this(regID, length, name, null, format, specialRule) { }
 
-        public Entry(int regID, int slots, string name, string unit, EntryFormat format)
-            : this(regID, slots, name, unit, format, null)
-        { }
+        public Entry(int regID, int length, string name, string unit, EntryFormat format)
+            : this(regID, length, name, unit, format, null) { }
 
-        public Entry(int regID, int slots, string name, string unit, EntryFormat format, Func<int[], object> specialRule)
+        public Entry(int regID, int length, string name, string unit, EntryFormat format, Func<int[], object> specialRule)
         {
             this.RegisterID = regID;
-            this.Slots = slots;
+            this.Length = length;
             this.Name = name;
             this.Unit = unit;
             this.Format = format;
@@ -90,8 +87,10 @@ namespace GambitChallenge.App_Code
                                 // Special format for the calendar value:
                                 if (encodedValues.Length == 3)
                                 {
+                                    // 6 values (s, m, h, d, M, y):
                                     int[] values = new int[encodedValues.Length * 2];
                                     
+                                    // Get each value from the three registers:
                                     for (int i = 0; i < encodedValues.Length; i++)
                                     {
                                         string binary = BinaryHelper.IntTo16BitBinaryString(encodedValues[i]);
@@ -99,14 +98,19 @@ namespace GambitChallenge.App_Code
                                         string high = binary.Substring(0, 8);
                                         string low = binary.Substring(8, 8);
 
-                                        int first = BinaryHelper.BinaryStringToBCD(low);
-                                        int second = BinaryHelper.BinaryStringToBCD(high);
+                                        int first = BinaryHelper.BinaryBCDStringToInt(low);
+                                        int second = BinaryHelper.BinaryBCDStringToInt(high);
 
                                         values[0 + i * 2] = first;
                                         values[1 + i * 2] = second;
                                     }
 
-                                    this.Value = new DateTime(2000 + values[5], values[4], values[3], values[2], values[1], values[0]);
+                                    // Make sure day and month values are not zero:
+                                    if (values[3] != 0 && values[4] != 0)
+                                    {
+                                        // Store datetime value:
+                                        this.Value = new DateTime(2000 + values[5], values[4], values[3], values[2], values[1], values[0]);
+                                    }
                                 }
                                 break;
                             }
@@ -168,22 +172,22 @@ namespace GambitChallenge.App_Code
                     }
                 }
             }
-
-            // If no value was parsed, set as "not available":
-            if (this.Value == null)
-                this.Value = "n/a";
         }
 
         public override string ToString()
         {
-            string s = this.Value.ToString();
-
-            if (!String.IsNullOrEmpty(this.Unit))
+            // Return "n/a" if no value exists:
+            if (this.Value != null)
             {
-                s += " " + this.Unit;
+                // Convert value to string and add unit (if available):
+                string s = this.Value.ToString();
+                if (!String.IsNullOrEmpty(this.Unit))
+                {
+                    s += " " + this.Unit;
+                }
+                return s;
             }
-
-            return s;
+            return "n/a";
         }
 
         #endregion
