@@ -162,7 +162,7 @@ Register entries are predefined in the Entry[] array _\_entries_ according to th
 
 The parser application uses a StreamReader to read the data from the text file. It begins by parsing the date, before moving on to reading each register and its respective value. These values are stored in the _rawEntries_ dictionary, which is indexed by register number.
 
-Once all the raw data has been gathered, a foreach iterator goes through each Entry object in the _\_entries_ array. Corresponding values for each entry are fetched from the _rawEntries_ dictionary and applied to the object via the public _SetValue_ method. Finally the parsed value is added to the UI as the contents of a set of dynamically added web controls.
+Once all the raw data has been gathered, a foreach iterator goes through each Entry object in the _\_entries_ array. Corresponding values for each entry are fetched from the _rawEntries_ dictionary and applied to the object via the public _SetValue_ method, which also parses the value. Finally the parsed value is added to the UI as the contents of a set of dynamically added web controls.
 
 ## Presentation
 
