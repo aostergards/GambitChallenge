@@ -8,9 +8,6 @@
 *.min.js
 *.min.map
 
-# Ignore auto-generated designer files
-*.designer.cs
-
 # Configuration files not relevant
 *.config
 
