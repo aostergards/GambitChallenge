@@ -169,3 +169,5 @@ Once all the raw data has been gathered, a foreach iterator goes through each En
 The UI is presented on a single page (Default.aspx).
 
 The data is presented in a very simple but readable way. Headed by the reading date, the range of select entries are presented. Some CSS (Content/Site.css) was used to customize the containers and input controls for a nicer look.
+
+Note: Due to some invalid values in the live feed, the application currently uses a text file with old but correct data as a proof of concept.
